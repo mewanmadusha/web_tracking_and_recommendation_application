@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+$route['timeline/(:any)/(:num)'] = 'timeline/view/$1/$2';
+$route['friends/follow'] = 'friends/follow';
+$route['friends'] = 'friends/index';
 $route['timeline/add'] = 'timeline/add';
 $route['timeline/update_submit'] = 'timeline/update_submit';
 $route['timeline/update/(:any)'] = 'timeline/update/$1';

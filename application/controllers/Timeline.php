@@ -5,20 +5,31 @@ class Timeline extends CI_Controller
 //	home is to default php page
 	public function index()
 	{
+		/*check login status*/
+		if (!$this->session->userdata('login_status')){
+			redirect('authentication/login_user');
+		}
 
 		$data['title'] = 'MusicTribute Timeline';
 
 		$data['posts'] = $this->posts_model->get_posts();
-//		print_r($data['posts']);
+		$data['user_data']=$this->user_model->get_users($this->session->userdata['usr_id']);
 
+//		print_r($data['posts']);
+//		print_r($data['user_data']);
 		$this->load->view('templates/header');
 		$this->load->view('timeline/index', $data);
 		$this->load->view('templates/footer');
 	}
 
 //to view post
-	public function view($slug = null, $id = NULL)
+	public function view($slug , $id )
 	{
+		/*check login status*/
+		if (!$this->session->userdata('login_status')){
+			redirect('authentication/login_user');
+		}
+
 		//slug using fr netter identification
 		$data['post'] = $this->posts_model->get_posts($id);
 //		$post_id = $data['post']['id'];
@@ -37,6 +48,11 @@ class Timeline extends CI_Controller
 	//to create post
 	public function add()
 	{
+
+		/*check login status*/
+		if (!$this->session->userdata('login_status')){
+			redirect('authentication/login_user');
+		}
 
 		$data['title'] = "Add new Post";
 
@@ -79,6 +95,11 @@ class Timeline extends CI_Controller
 
 	public function delete($id)
 	{
+		/*check login status*/
+		if (!$this->session->userdata('login_status')){
+			redirect('authentication/login_user');
+		}
+
 //		echo $id;
 		$this->posts_model->delete_post($id);
 		redirect('timeline');
@@ -86,6 +107,11 @@ class Timeline extends CI_Controller
 
 	public function update($id)
 	{
+
+		/*check login status*/
+		if (!$this->session->userdata('login_status')){
+			redirect('authentication/login_user');
+		}
 
 		$data['post'] = $this->posts_model->get_posts($id);
 //		$post_id = $data['post']['id'];
@@ -103,9 +129,13 @@ class Timeline extends CI_Controller
 	}
 	public function update_submit()
 	{
+		/*check login status*/
+		if (!$this->session->userdata('login_status')){
+			redirect('authentication/login_user');
+		}
 
-	 $this->posts_model->update_post();
-	redirect('timeline');
+		 $this->posts_model->update_post();
+		redirect('timeline');
 	}
 }
 

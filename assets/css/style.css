@@ -3,9 +3,27 @@
 	color: white;
 }
 .card-body{
-	background-color: #666666;
+	background-color: #F3F3F3;
 }
 .card{
 	padding: 30px;
+}
+
+body {
+	padding-top: 56px;
+}
+.profile-header-container{
+
+	margin-top: 10%;
+
+
+}
+.rounded-circle{
+	max-width: 200px;
+	max-height: 300px;
+}
+
+.col-lg-9{
+	margin-top: 2%;
 }
 
