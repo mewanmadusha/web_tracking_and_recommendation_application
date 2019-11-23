@@ -6,7 +6,20 @@ class Musicgenres_model extends CI_Model{
 	public function get_genres(){
 		$this->db->order_by('genre_name');
 		$query = $this->db->get('music_genres');
-		return $query->result_array();
+
+		$genreList=array();
+		if ($query->num_rows() != 0) {
+			foreach ($query->result() as $row) {
+
+				$genreList[] = new Musicgenres($row->id, $row->genre_name);
+
+			}
+
+
+		}
+		$returnedArray = array('result' => true, 'genList' => $genreList);
+		return $returnedArray;
+
 	}
 
 	public function get_genre($id){

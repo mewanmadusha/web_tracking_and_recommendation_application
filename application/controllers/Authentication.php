@@ -1,16 +1,22 @@
 <?php
 
+
 class Authentication extends CI_Controller
 {
 	public function register_user()
 	{
-		$register_data['title'] = 'Register User';
+//		$register_data['title'] = 'Register User';
 
 //		retrive available music genres
-		$register_data['genres'] = $this->musicgenres_model->get_genres();
+		$returnedResult_genreList = $this->musicgenres_model->get_genres();
 
 //		debug purpose
 //		print_r($register_data);
+
+		$register_data = array(
+			'title'=> 'Register User',
+			'genreList' => $returnedResult_genreList['genList'],
+		);
 
 		$this->form_validation->set_rules('name', 'Name', 'required');
 		$this->form_validation->set_rules('username', 'Username', 'required|callback_check_existing_username');
@@ -18,6 +24,9 @@ class Authentication extends CI_Controller
 		$this->form_validation->set_rules('conpassword', 'Confirm Password', 'matches[password]');
 
 		if ($this->form_validation->run() === FALSE) {
+
+
+
 			$this->load->view('templates/header');
 			/// derectory path
 			$this->load->view('authentication/register', $register_data);
@@ -25,10 +34,12 @@ class Authentication extends CI_Controller
 		} else {
 			/*password encryption*/
 			$encrypt_pw = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
+//			$genre_list_selected=$this->input->post('genre');
+//			print_r($genre_list_selected);
 			$this->user_model->register_user($encrypt_pw);
 			/*session handling*/
 			$this->session->set_flashdata('user_successfully_registered', 'You can log now');
-			redirect('uthentication/login_user');
+			redirect('authentication/login_user');
 
 		}
 	}
@@ -47,8 +58,13 @@ class Authentication extends CI_Controller
 	/*login function*/
 	public function login_user()
 	{
+		if ($this->session->userdata('login_status')){
+			redirect('timeline');
+		}
+
 		$register_data['title'] = 'Login';
 
+//		print_r('jefe');
 
 		$this->form_validation->set_rules('username', 'Username', 'required');
 		$this->form_validation->set_rules('password', 'Password', 'required');

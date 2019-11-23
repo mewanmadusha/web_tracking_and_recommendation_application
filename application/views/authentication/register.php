@@ -1,10 +1,14 @@
-<h2><?= $title; ?></h2>
-<?php echo validation_errors(); ?>
+<!--<h2>--><?//= $title; ?><!--</h2>-->
+<?php //echo validation_errors(); ?>
 
-<?php echo form_open('authentication/register_user'); ?>
-<div class="row">
-	<div class="col-md-4 col-md-offset-4">
-		<h1 class="text-center"><?= $title; ?></h1>
+<div class="wrapper2">
+	<form class="form-reg" role="form" method="post" action="<?php echo base_url('index.php/authentication/register_user'); ?>">
+
+		<!--validation errors-->
+		<?php if (validation_errors()) : ?>
+			<div class="alert alert-primary" role="alert"><?php echo validation_errors(); ?></div>
+		<?php endif; ?>
+		<h2 class="form-signin-heading">Please Register</h2>
 		<div class="form-group">
 			<label>Name</label>
 			<input type="text" class="form-control" name="name" placeholder="Name">
@@ -21,35 +25,24 @@
 			<label>Confirm Password</label>
 			<input type="password" class="form-control" name="conpassword" placeholder="Confirm Password">
 		</div>
-
-<!--		<label>Select your music genre</label>-->
-<!--		<select name="genre_id" class="form-controller">-->
-<!--			--><?php //foreach ($genres as $genre):?>
-<!--			<option value="--><?php //echo $genre['id']?><!--">--><?php //echo $genre['genre_name']?><!--</option>-->
-<!--			--><?php // endforeach;?>
-<!--		</select>-->
-
-		<select required id="genre_id" name="genre_id[]" multiple class="form-control dropdown-toggle dropdowncss" >
-			<?php
-			if (!is_null($genres)) {
-				if (count($genres) > 0) {
-//                                                echo "<option value=''>--------------Select your Music Genere--------------</option>";
-					foreach ($genres as $m) {
-						echo "<option value='" . $m['genre_name'] . "'>" . $m['genre_name'] . "</option>";
-					}
-				}
-			} ?>
-
 		<div class="form-group">
-			<label>Uplode Profile image</label>
-			<input type="file" name="profileimg" size="20">
+			<label>Select Music Genres </label>
+		<select required id="genre_id" name="genre[]" multiple class="form-control dropdown-toggle dropdowncss" >
+			<?php foreach ($genreList as $gl) : ?>
+
+				<option value="<?php echo $gl->getGenreId();?>">  <?php echo $gl->getGenreName();?>  </option>
+
+			<?php endforeach; ?>
+
+		</select>
 		</div>
 		<div class="form-group">
 			<label>Link to profile picture</label>
-			<input type="password" class="form-control" name="profileimglink" placeholder="Insert Profile picture Link (url)">
+		<input type="text" class="form-control" name="profileimglink" placeholder="Insert Profile picture Link (url)">
 		</div>
 
-		<button type="submit" class="btn btn-primary btn-block">Submit</button>
-	</div>
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+	</form>
+	<?php echo form_close(); ?>
+
 </div>
-<?php echo form_close(); ?>

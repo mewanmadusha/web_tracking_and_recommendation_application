@@ -7,12 +7,25 @@ class User_model extends CI_Model
 			'name'=> $this->input->post('name'),
 			'username'=> $this->input->post('username'),
 			'password'=> $encrypt_pw,
-			'user_profile_img_url'=> $this->input->post('profileimglink'),
-			'music_gener_id'=>$this->input->post('genre_id')
+			'user_profile_img_url'=> $this->input->post('profileimglink')
 		);
 
+		$result=$this->db->insert('users',$register_usr_data);
+		$insert_id = $this->db->insert_id();
+		if ($insert_id) {
+			$genre = $this->input->post('genre');
+
+			for ($x = 0; $x < count($genre); $x++) {
+			$genre_data=array(
+				'user_id'=> $insert_id,
+				'genres_id'=> $genre[$x]
+			);
+
+				$this->db->insert('user_music_genres', $genre_data);
+			}
+		}
 		/*add new user to database*/
-		return $this->db->insert('users',$register_usr_data);
+		return $result;
 	}
 
 	public function login_user($username,$password)
@@ -56,6 +69,7 @@ class User_model extends CI_Model
 			return $query->result_array();
 		}
 		$query = $this->db->get_where('users', array('id' => $id));
+//		$user_data=new User($query->id,$query->name,$query->username,$query->user_profile_img_url,null,null);
 		return $query->row_array();
 	}
 

@@ -1,7 +1,7 @@
 </div>
 <div class="container">
 	<div class="page-header">
-		<center><h2><?= $title ?></h2></center>
+		<center><h2><?php echo $userprofile['name'] ?>'s <?= $title ?></h2></center>
 	</div>
 </div>
 
@@ -17,20 +17,44 @@
 						<div class="profile-header-img">
 							<div class="list-group">
 								<a class="list-group-item">
-									<?php if ($profileData['user_profile_img_url']) : ?>
-									<img class="rounded-circle" src="<?php echo $profileData['user_profile_img_url'] ?>"/>
+									<?php if ($userprofile['user_profile_img_url']) : ?>
+									<img class="rounded-circle" src="<?php echo $userprofile['user_profile_img_url'] ?>"/>
 									<?php else : ?>
-									<img class="rounded-circle"
-										 src="https://prime.cimbbank.com.my/content/dam/cimb-consumer/primebanking/Prime%20Perspective%20-%20Prime%20Account.png"/>
+										<img class="rounded-circle"
+											 src="https://prime.cimbbank.com.my/content/dam/cimb-consumer/primebanking/Prime%20Perspective%20-%20Prime%20Account.png"/>
 									<?php endif; ?>
-									<center><h1 class="my-4"><?php echo $profileData['name'] ?></h1></center>
+									<center><h1 class="my-4"><?php echo $userprofile['name'] ?></h1></center>
 								</a>
+
 								<a href="<?php echo base_url(); ?>index.php/timeline" class="list-group-item">Public Timeline</a>
 								<a href="<?php echo site_url('/timeline/view_profile/'. $this->session->userdata('usr_id')); ?>" class="list-group-item">Your Timeline</a>
-								<a href="<?php echo base_url(); ?>index.php/friends/followings" class="list-group-item">Followings </a>
-								<a href="<?php echo base_url(); ?>index.php/friends/followers" class="list-group-item">Followers</a>
+
+								<?php if ($userprofile['id']==$this->session->userdata['usr_id']) : ?>
+									<a href="<?php echo base_url(); ?>index.php/friends/followings" class="list-group-item">Followings </a>
+									<a href="<?php echo base_url(); ?>index.php/friends/followers" class="list-group-item">Followers</a>
 								<a href="<?php echo base_url(); ?>index.php/friends" class="list-group-item">Get More Friends</a>
 
+								<?php endif; ?>
+
+
+								<?php if ($userprofile['id']!=$this->session->userdata('usr_id')) : ?>
+								<?php if ($followStatus) : ?>
+									<a  class="list-group-item">
+										<?php echo form_open_multipart('friends/unfollow_profile'); ?>
+										<input type="hidden" name="id" value="<?php echo $userprofile['id']; ?>">
+										<button type="submit" class="btn btn-secondary">Unfollow</button>
+										</form>
+									</a>
+								<?php else : ?>
+									<a  class="list-group-item">
+										<?php echo form_open_multipart('friends/follow_profile'); ?>
+										<input type="hidden" name="id" value="<?php echo $userprofile['id']; ?>">
+
+										<button type="submit" class="btn btn-primary">Follow</button>
+										</form>
+									</a>
+								<?php endif; ?>
+								<?php endif; ?>
 							</div>
 						</div>
 					</div>
@@ -44,9 +68,7 @@
 		<div class="col-lg-9">
 
 			<div class="row">
-				<?php if($postList==null) : ?>
-					<div class="alert alert-primary" role="alert">There is no posts to show to view posts add more friends and Create Posts</div>
-				<?php else : ?>
+
 				<?php foreach ($postList as $post) : ?>
 
 					<?php
@@ -60,21 +82,21 @@
 
 						// make the urls hyper links
 //						for ($x = 0; $x <=count($url); $x++) {
-							$new_description= preg_replace($url_character, "<a href='{$url[0]}'>{$url[0]}</a> ", $post->getPostDescription());
+						$new_description= preg_replace($url_character, "<a href='{$url[0]}'>{$url[0]}</a> ", $post->getPostDescription());
 //						}
 
 
 
 //							detect current url is an image or not
-							$imgTypesArr = array("gif", "jpg", "jpeg", "png", "tiff", "tif");
-							$urlExt = pathinfo($url[0], PATHINFO_EXTENSION);
-							if (in_array($urlExt, $imgTypesArr)) {
-								$img_path=$url[0];
-								$img_from_url=true;
-							}
-							else{
-								$img_from_url=false;
-							}
+						$imgTypesArr = array("gif", "jpg", "jpeg", "png", "tiff", "tif");
+						$urlExt = pathinfo($url[0], PATHINFO_EXTENSION);
+						if (in_array($urlExt, $imgTypesArr)) {
+							$img_path=$url[0];
+							$img_from_url=true;
+						}
+						else{
+							$img_from_url=false;
+						}
 
 
 					} else {
@@ -86,13 +108,13 @@
 					?>
 
 
-					<div class="col-lg-6 col-md-6 mb-3">
+					<div class="col-lg-6 col-md-6 mb-4">
 						<div class="card h-100">
 
 							<?php if($img_from_url) : ?>
-							<a href="#"><img class="card-img-top" style="height: 150px;width: 330px; -o-object-fit: contain;"
-											 src="<?php echo $img_path; ?>"
-											 alt=""></a>
+								<a href="#"><img class="card-img-top"
+												 src="<?php echo $img_path; ?>"
+												 alt=""></a>
 							<?php endif; ?>
 							<div class="card-body">
 								<h4 class="card-title">
@@ -101,7 +123,7 @@
 								<p class="card-text">
 									<small class="card-text">Posted on: <?php echo $post->getPostedTime(); ?></small>
 									<br>
-									<?php echo  word_limiter($new_description,80); ?></p>
+									<?php echo  word_limiter($new_description,50); ?></p>
 
 								<br><br>
 								<p><a class="btn btn-secondary"
@@ -109,13 +131,12 @@
 										More</a></p>
 							</div>
 							<div class="card-footer">
-								<p>Posted By <a href="<?php echo site_url('/timeline/view_profile/'. $post->getUserId()); ?>"><?php echo $post->getUserName(); ?><a></p>
+								<p>Posted By <a><?php echo $userprofile['name']; ?><a></p>
 							</div>
 						</div>
 					</div>
-
 				<?php endforeach; ?>
-				<?php endif; ?>
+
 			</div>
 			<!-- /.row -->
 
@@ -127,10 +148,3 @@
 
 </div>
 <!-- /.container -->
-
-
-
-
-
-
-

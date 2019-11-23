@@ -36,30 +36,47 @@ if(preg_match($url_character, $post['post_description'], $url)) {
 }
 ?>
 
-<div class="card">
-
-	<?php if($img_from_url) : ?>
+<!--<div class="card">-->
+<!---->
+<!--	--><?php //if($img_from_url) : ?>
 <!--	<img style="max-height: 200px; max-width: 400px" src="--><?php //echo site_url()?><!--/assets/images/posts/--><?php //echo $post['post_image_path'];?><!--">-->
+<!--		<img style="max-height: 200px; max-width: 400px" src="--><?php //echo $img_path;?><!--">-->
+<!--	--><?php //endif; ?>
+<!---->
+<!--	<h3 class="card-header">--><?php //echo $post['post_title']; ?><!--</h3>-->
+<!--	<br>-->
+<!--	<br>-->
+<!--	<div class="card-body">-->
+<!--		<small class="card-text">Posted on: --><?php //echo $post['posted_time']; ?><!-- in </small><br>-->
+<!--		--><?php //echo $new_description; ?>
+<!--	</div>-->
+<!---->
+<!--	<hr>-->
+<!---->
+<!---->
+<!---->
+<!--</div>-->
+<!--only matchinguser can update and delete post-->
+<?php //if($this->session->userdata('usr_id') == $post['user_id']) :?>
+<!--<a class="btn btn-secondary" style="width: 200px" href="--><?php //echo base_url(); ?><!--timeline/update/--><?php //echo $post['post_id']; ?><!--">Update Post</a>-->
+<?php //echo form_open('/timeline/'.$post['post_id']); ?>
+<!--<input type="submit" value="Delete Post" style="width: 200px " class="btn btn-danger">-->
+<?php //endif; ?>
+</form>
+<div class="card" style="width: 80rem; margin-left: 12%; margin-top: 5%">
+	<?php if($img_from_url) : ?>
 		<img style="max-height: 200px; max-width: 400px" src="<?php echo $img_path;?>">
 	<?php endif; ?>
-
-	<h3 class="card-header"><?php echo $post['post_title']; ?></h3>
-	<br>
-	<br>
 	<div class="card-body">
-		<small class="card-text">Posted on: <?php echo $post['posted_time']; ?> in </small><br>
-		<?php echo $new_description; ?>
+		<h3 class="card-header"><?php echo $post['post_title']; ?></h3>
+		<div class="card-body">
+			<small class="card-text">Posted on: <?php echo $post['posted_time']; ?> in </small><br>
+			<?php echo $new_description; ?>
+		</div>
+		<?php if($this->session->userdata('usr_id') == $post['user_id']) :?>
+			<a class="btn btn-secondary" style="width: 200px" href="<?php echo base_url(); ?>index.php/timeline/update/<?php echo $post['post_id']; ?>">Update Post</a>
+			<?php echo form_open('/timeline/delete?id='.$post['post_id']); ?>
+			<input type="submit" value="Delete Post" style="width: 200px " class="btn btn-danger">
+		<?php endif; ?>
 	</div>
-
-	<hr>
-
-
-
 </div>
-<!--only matchinguser can update and delete post-->
-<?php if($this->session->userdata('usr_id') == $post['user_id']) :?>
-<a class="btn btn-secondary" style="width: 200px" href="<?php echo base_url(); ?>timeline/update/<?php echo $post['post_id']; ?>">Update Post</a>
-<?php echo form_open('/timeline/'.$post['post_id']); ?>
-<input type="submit" value="Delete Post" style="width: 200px " class="btn btn-danger">
-<?php endif; ?>
-</form>

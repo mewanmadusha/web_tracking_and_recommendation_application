@@ -8,6 +8,8 @@ class User
 	private $username;
 	private $profilePictureUrl;
 	private $password;
+	private $genresFounds;
+	private $following_id;
 
 	/**
 	 * User constructor.
@@ -17,13 +19,15 @@ class User
 	 * @param $profilePictureUrl
 	 * @param $password
 	 */
-	public function __construct($userId, $name, $username, $profilePictureUrl, $password)
+	public function __construct($userId, $name, $username, $profilePictureUrl, $password,$genresFounds,$following_id)
 	{
 		$this->userId = $userId;
 		$this->name = $name;
 		$this->username = $username;
 		$this->profilePictureUrl = $profilePictureUrl;
 		$this->password = $password;
+		$this->genresFounds = $genresFounds;
+		$this->following_id = $following_id;
 	}
 
 	/**
@@ -104,6 +108,54 @@ class User
 	public function setPassword($password)
 	{
 		$this->password = $password;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getFollowStatus()
+	{
+		return $this->followStatus;
+	}
+
+	/**
+	 * @param mixed $followStatus
+	 */
+	public function setFollowStatus($followStatus)
+	{
+		$this->followStatus = $followStatus;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getGenresFounds()
+	{
+		return $this->genresFounds;
+	}
+
+	/**
+	 * @param mixed $genresFounds
+	 */
+	public function setGenresFounds($genresFounds)
+	{
+		$this->genresFounds = $genresFounds;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getFollowingId()
+	{
+		return $this->following_id;
+	}
+
+	/**
+	 * @param mixed $following_id
+	 */
+	public function setFollowingId($following_id)
+	{
+		$this->following_id = $following_id;
 	}
 
 
